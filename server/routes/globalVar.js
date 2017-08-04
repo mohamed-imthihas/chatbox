@@ -1,0 +1,3 @@
+exports.globalVars={
+	io :null
+};
