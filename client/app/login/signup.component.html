@@ -1,0 +1,84 @@
+<div class="row">
+	<div class="col s6 offset-s3">
+	<h1>Sign up</h1>
+	<div class="row">
+		<form class="col s12" [formGroup]="signupForm" (ngSubmit)="signUp()">
+		<div class="row">
+				<div class="input-field col s12">
+						<input type="text" name="fullName" id="fullName" formControlName="fullName" [ngClass]="{'invalid':(signupForm.get('fullName').hasError('required') || signupForm.get('fullName').hasError('minlength') || signupForm.get('fullName').hasError('maxlength')) && signupForm.get('fullName').touched} ">
+					<label for="fullName">Full Name</label>
+					<div class="red-text" [hidden]="!(signupForm.get('fullName').hasError('required') && signupForm.get('fullName').touched)">
+						Full name is required.
+					</div>
+					<div class="red-text" [hidden]="!((signupForm.get('fullName').hasError('minlength') || signupForm.get('fullName').hasError('maxlength')) && signupForm.get('fullName').touched)">
+						Full name should have min. 5 characters &amp; max. 18 characters.
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="input-field col s12">
+						<input type="text" name="email" id="email" formControlName="email" [ngClass]="{'invalid':(signupForm.get('email').hasError('required') || signupForm.get('email').hasError('email') || signupForm.get('email').hasError('alreadyExist'))  && signupForm.get('email').touched} ">
+					<label for="email">Email</label>
+					<div class="red-text" [hidden]="!(signupForm.get('email').hasError('required') && signupForm.get('email').touched)">
+						Email is required.
+					</div>
+					<div class="red-text" [hidden]="!((!signupForm.get('email').hasError('required') && signupForm.get('email').hasError('email')) && signupForm.get('email').touched)">
+						Invalid email format.
+					</div>
+					<div class="red-text" [hidden]="!(signupForm.get('email').hasError('alreadyExist') && signupForm.get('email').touched)">
+						This email has been already registered.
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="input-field col s12">
+					<input type="password" name="password" id="password" formControlName="password" [ngClass]="{'invalid':(signupForm.get('password').hasError('required') || signupForm.get('password').hasError('pattern')) && signupForm.get('password').touched} ">
+					<label for="password">Password</label>
+					<div class="red-text" [hidden]="!(signupForm.get('password').hasError('required') && signupForm.get('password').touched)">
+						Password is required.
+					</div>
+					<div class="red-text" [hidden]="!(signupForm.get('password').hasError('pattern') && signupForm.get('password').touched)">
+						Password should be min. 8 characters with one special character.
+					</div>
+				</div>
+			</div>
+			<!-- <div class="row">
+				<div class="input-field col s12">
+					<input type="password" name="rePassword" id="rePassword" formControlName="rePassword" [ngClass]="{'invalid':signupForm.get('rePassword').hasError('required')   && signupForm.get('rePassword').touched} ">
+					<label for="rePassword">Re-type Password</label>
+					<div class="red-text" [hidden]="!(signupForm.get('rePassword').hasError('required') && signupForm.get('rePassword').touched)">
+						Password is required.
+					</div>
+				</div>
+			</div> -->
+			<div class="row">
+				<div class="input-field col s12">
+						<input type="text" name="dob" id="dob" formControlName="dob" materialize="pickadate" [ngClass]="{'invalid':signupForm.get('dob').hasError('required')  && signupForm.get('dob').touched} ">
+					<label for="dob">Date Of Birth</label>
+					<div class="red-text" [hidden]="!(signupForm.get('dob').hasError('required') && signupForm.get('dob').touched)">
+						Date of Birth is required	
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="input-field col s12">
+						<input type="text" name="mobile" id="mobile" formControlName="mobile" [ngClass]="{'invalid':(signupForm.get('mobile').hasError('required') || signupForm.get('mobile').hasError('pattern'))  && signupForm.get('mobile').touched} ">
+					<label for="mobile">Mobile Number</label>
+					<div class="red-text" [hidden]="!(signupForm.get('mobile').hasError('required') && signupForm.get('mobile').touched)">
+						Mobile Number is required.
+					</div>
+					<div class="red-text" [hidden]="!((!signupForm.get('mobile').hasError('required') && signupForm.get('mobile').hasError('pattern')) && signupForm.get('mobile').touched)">
+						 Enter 10 digit number without (+91)
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col s12 right-align">
+					<input type="reset" value="Cancel" class="btn" routerLink="/">
+					<input type="submit" name="" [disabled]="signupForm.invalid" value="Sign Up" class="btn">
+				</div>
+			</div>
+		</form>
+	</div>
+	</div>
+</div>

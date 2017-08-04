@@ -1,0 +1,35 @@
+<div>
+	<div *ngIf="toUser != undefined">
+		<nav>
+		    <div class="nav-wrapper">
+		      <a class="brand-logo center">{{toUser.fullName}}</a>
+		    </div>
+		</nav>
+		<div class="messages" #msgDiv>
+			<div *ngFor = "let msg of messages">
+				<div *ngIf="checkDateForDisplay(msg.time)" class="date center-align">{{msg.time | date:"dd MMMM yy"}}
+				</div>
+				<div class="message" [class.sent]="msg.to == toUser.email">
+					<div class="msgTxt" [innerHTML]="msg.msg | emoji">
+						
+					</div>
+					<div class="clearfix"></div>
+					<div class="time">{{msg.time | date:'HH:mm'}}</div>
+				</div>
+				
+				
+			</div>
+			<div [hidden]="messages.length !=0" class="center-align">
+				<h6>No messages....</h6>
+			</div>
+		</div>
+		<emoji-input (onSend)="sendMessage($event)"></emoji-input>
+	</div>
+		<div class="" *ngIf="toUser == undefined">
+			<br>
+			<br>
+			<br>
+		  	<div class="center-align"><span>Select the user to start chat</span></div>
+		</div>
+
+</div>

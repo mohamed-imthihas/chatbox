@@ -1,0 +1,13 @@
+<div>
+	<nav>
+		    <div class="nav-wrapper">
+		      <a class="brand-logo">User List</a>
+		    </div>
+		</nav>
+	<div class="collection">
+		<a *ngFor="let user of users" class="collection-item"  (click)="changeUser(user)" [class.hide]="user.email == currentUser.email">
+			<span>{{user.fullName}}</span>
+			<a href="javascript:void(0)" [hidden]="user.status != 'N'" (click)="add(user)" class="right" data-delay="50" materialize="tooltip" data-tooltip="Add as friend"><i class="material-icons">person_add</i></a>
+		</a>
+	</div>
+</div>
