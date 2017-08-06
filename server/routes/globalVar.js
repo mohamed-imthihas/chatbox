@@ -1,3 +1,4 @@
 exports.globalVars={
-	io :null
+	io :null,
+	socketList:[]
 };
