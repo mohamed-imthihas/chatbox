@@ -1,13 +1,32 @@
 <div>
-	<nav>
-		    <div class="nav-wrapper">
-		      <a class="brand-logo">User List</a>
-		    </div>
-		</nav>
-	<div class="collection">
-		<a *ngFor="let user of users" class="collection-item"  (click)="changeUser(user)" [class.hide]="user.email == currentUser.email">
-			<span>{{user.fullName}}</span>
-			<a href="javascript:void(0)" [hidden]="user.status != 'N'" (click)="add(user)" class="right" data-delay="50" materialize="tooltip" data-tooltip="Add as friend"><i class="material-icons">person_add</i></a>
-		</a>
+	<ul materialize="collapsible" class="collapsible" data-collapsible="expandable">
+	<li>
+      <div class="collapsible-header active">New Request</div>
+      <div class="collapsible-body">
+		<div class="collection" *ngIf="(users | friendRequest).length !=0">
+			<a *ngFor="let user of users | friendRequest" class="collection-item avatar" [class.hide]="user.email == currentUser.email">
+				<img [src]="user | userinfo:'image'" class="circle" [class.online]="user | userinfo:'online'">
+				<span>{{user.fullName}}</span>
+				<a href="javascript:void(0)" (click)="reject(user)" class="right red-text" data-delay="50" materialize="tooltip" data-tooltip="Reject"><i class="material-icons">cancel</i></a>
+				<a href="javascript:void(0)" (click)="accept(user)" class="right green-text" data-delay="50" materialize="tooltip" data-tooltip="Accept"><i class="material-icons">check_circle</i></a>
+			</a>
+		</div>
+		<div *ngIf="(users | friendRequest).length ==0" class="center-align">
+			<p>No friend request</p>
+		</div>
 	</div>
+	</li>
+	<li>
+      <div class="collapsible-header active">All People</div>
+      <div class="collapsible-body">
+		<div class="collection">
+			<a *ngFor="let user of users" class="collection-item avatar"  [class.hide]="user.email == currentUser.email">
+				<img [src]="user | userinfo:'image'" class="circle" [class.online]="user | userinfo:'online'">
+				<span>{{user.fullName}}</span>
+				<a href="javascript:void(0)" *ngIf="user.status == 'U' || user.status == 'R'" (click)="add(user)" class="right" data-delay="50" materialize="tooltip" data-tooltip="Add as friend"><i class="material-icons">person_add</i></a>
+			</a>
+		</div>
+	</div>
+	</li>
+	</ul>
 </div>

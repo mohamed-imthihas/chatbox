@@ -1,8 +1,32 @@
 <div>
 	
 	<div class="row">
-		<user-list class="col s3"></user-list>
-		<chat class="col s8">
+		<div class="col l4 m4 s12" [ngClass]="{'hide-on-small-only':isChat}">
+			<div class="collection">
+				<div class="collection-item avatar valign-wrapper">
+					<img [src]="currentUser | userinfo:'image'" class="circle">
+					<span class="title truncate">{{currentUser.fullName}}</span>
+					<div class="secondary-content">
+						<!-- <a href="javascript:void(0)"><i class="material-icons">people</i></a> -->
+						<a href="javascript:void(0)" (click)="logout()"><i class="material-icons">exit_to_app</i></a>
+					</div>
+				</div>
+			</div>
+			<nav [hidden]="isAll">
+			    <div class="nav-wrapper teal">
+			      <a class="brand-logo left">Friends</a>
+			      <a href="javascript:void(0)" class="right" routerLink="/home/all"><i class="material-icons">people</i></a>
+			    </div>
+			</nav>
+			<nav [hidden]="!isAll">
+			    <div class="nav-wrapper teal">
+			      <a class="brand-logo left">All People</a>
+			      <a href="javascript:void(0)" class="right" routerLink="/home"><i class="material-icons">arrow_back</i></a>
+			    </div>
+			</nav>
+			<router-outlet ></router-outlet>
+		</div>
+		<chat class="col l8 m8 s12" [ngClass]="{'hide-on-small-only':!isChat}">
 		</chat>
 	</div>
 </div>

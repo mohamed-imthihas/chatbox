@@ -10,19 +10,24 @@ moduleId: __moduleName,
   styleUrls:['./userlist.component.css']
 })
 export class UserListComponent implements OnInit{
-	users:any[];
+	users:any[]=[];
 	currentUser:any;
-	constructor(private userListService:UserListService,private authService:AuthenticationService){}
+	constructor(private userListService:UserListService,private authService:AuthenticationService){
+		this.users = this.userListService.getUsers();
+	}
 	ngOnInit(){
-		this.userListService.getUsers().then((users)=>{
-			this.users = users;
-		});
 		this.currentUser = this.authService.getLoggedUser();
 	}
 	changeUser(user:any){
-		this.userListService.changeUser(user);
+//		this.userListService.changeUser(user);
 	}
 	add(user:any){
 		this.userListService.addFriend(user);
+	}
+	accept(user:any){
+		this.userListService.respondRequest(user,"accept");
+	}
+	reject(user:any){
+		this.userListService.respondRequest(user,"reject");
 	}
 }

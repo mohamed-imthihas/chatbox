@@ -2,6 +2,15 @@
 	border: 1px solid #ccc;
 	height: 615px;
 }
+nav .nav-wrapper{
+	padding:0px 10px;
+}
+nav img{
+	width: 35px;
+}
+.middle{
+	vertical-align: middle;
+}
 .intialMsg{
 	height: 612px;
 	text-align: center;

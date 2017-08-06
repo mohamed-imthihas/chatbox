@@ -13,9 +13,7 @@
 	height: 30px;
 	top: 50%;
 	transform: translateY(-50%);
-}
-.collapsible-body{
-	padding: 0px;
+	display: inline-block;
 }
 .online{
 	border:3px solid #26a69a;

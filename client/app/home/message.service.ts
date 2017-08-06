@@ -31,9 +31,11 @@ export class MessageService{
 	}*/
 	getMessage(){
 		this.socketService.getMessages().subscribe(data=>{
-			if(this.toUser.email != data.from){
+			if(this.toUser == null || this.toUser.email != data.from){
 				return;
 			}
+			this.http.post("/setunread",{user1:this.currentUser.email,user2:this.toUser.email}).toPromise()
+			.then(()=>{});
 			this.messages.push(data);
 		});
 		return this.messages;
@@ -42,13 +44,13 @@ export class MessageService{
 		let msg = {
 			from:this.currentUser.email,
 			to:this.toUser.email,
-			msg:message,
-			time:new Date(),
-			status:0
+			msg:message
 		}
-		this.messages.push(msg);
+		//this.messages.push(msg);
 		//this.socket.emit("sentMessage",msg);
-		this.socketService.sendMessage(msg);
+		this.socketService.sendMessage(msg,(data)=>{
+			this.messages.push(data);
+		});
 	}
 	setToUser(user:User){
 		this.toUser = user;
