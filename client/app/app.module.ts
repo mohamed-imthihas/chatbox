@@ -15,10 +15,17 @@ import { AuthenticationService }  from './login/authentication.service';
 import { HomeComponent }  from './home/home.component';
 import { UserListComponent }  from './home/userlist.component';
 import { UserListService }  from './home/userlist.service';
+import { FriendListComponent }  from './home/friendlist.component';
+import { FriendListService }  from './home/friendlist.service';
 import {ChatComponent} from "./home/chat.component";
 import  {MessageService} from './home/message.service';
 import {EmojiModule} from "./emoji/emoji.module"
 import {SocketService} from "./home/socket.service";
+import {FriendRequestPipe} from "./home/friendreq.pipe";
+import {SortPipe} from "./home/sort.pipe";
+import {UserDpPipe} from "./home/userdp.pipe";
+
+
 
 @NgModule({
   imports: [
@@ -31,9 +38,13 @@ import {SocketService} from "./home/socket.service";
     SignupComponent,
     HomeComponent,
     UserListComponent,
-    ChatComponent
+    ChatComponent,
+    FriendRequestPipe,
+    FriendListComponent,
+    SortPipe,
+    UserDpPipe
   ],
-  providers:[AuthenticationService,MessageService,UserListService,SocketService],
+  providers:[AuthenticationService,MessageService,UserListService,SocketService,FriendListService],
   bootstrap: [ AppComponent ]
 })
 export class AppModule { }
