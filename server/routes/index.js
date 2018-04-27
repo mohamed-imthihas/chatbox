@@ -17,9 +17,9 @@ io.on('connection',function(sock){
 		}
 	})
 	sock.on("disconnect",function(){
-		console.log("user disconnected");
 		var user = sock.handshake.query.email;
-		socketList.splice(socketList.indexOf(sock),1);
+		delete socketList[user];
+		console.log(socketList);
 		io.emit("userOnline",{email:user,online:false});	
 	});
 	io.emit("userOnline",{email:sock.handshake.query.email,online:true});
@@ -56,6 +56,7 @@ router.post("/addFriend",function(req,res){
 		var email = req.body.friend.email;
 		var socket = socketList[email];
 		if(socket){
+			console.log("add");
 			socket.emit("updateUserList",result.toFriend);
 			socket.emit("updateFriendList",result.toFriend);
 		}
@@ -81,5 +82,42 @@ router.post("/getFriends",function(req,res){
 router.post("/setunread",function(req,res){
 	db.setUnread(req.body);
 	res.end();
+})
+router.post("/getUserInfo",function(req,res){
+	db.getUserInfo(req.body,function(result){
+		res.json(result);
+	})
+})
+router.post("/setUserInfo",function(req,res){
+	db.setUserInfo(req.body,function(result){
+		res.json(result);
+		io.emit("updateUserList",{email:req.body.email,fullName:req.body.user.fullName});
+	})
+})
+router.post("/uploadImage",function(req,res){
+	var sampleFile = req.files.file1;
+	var fileName = "./images/"+req.body.email + ".png"
+	sampleFile.mv('../client/images/'+req.body.email + ".png",function(err){
+		var toSend=fileName+ "?"+new Date().getTime();
+		io.emit("updateUserList",{email:req.body.email,image:toSend});
+		res.end();
+	});
+	db.saveProfileImg({email:req.body.email,image:fileName});
+	
+})
+router.post("/changePassword",function(req,res){
+	db.changePassword(req.body,function(result){
+		res.json(result);
+	})
+})
+router.post("/resetPassword",function(req,res){
+	db.resetPassword(req.body,function(result){
+		res.json(result)
+	})
+})
+router.post("/checkEmailAndDOB",function(req,res){
+	db.checkEmailAndDOB(req.body,function(result){
+		res.json(result)
+	})
 })
 module.exports = router;

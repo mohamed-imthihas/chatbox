@@ -1,6 +1,7 @@
 var express = require('express');
 var path = require('path');
 var bodyParser = require('body-parser');
+var fileUpload = require('express-fileupload');
 var app = express();
 var http    = require('http').Server(app);
 var io      = require('socket.io')(http);
@@ -9,6 +10,7 @@ globalVar.io = io;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, '../client')));
+app.use(fileUpload());
 var router = require("./routes/index");
 app.use(router);
 // app.set('port', process.env.PORT || 9090);

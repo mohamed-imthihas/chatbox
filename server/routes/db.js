@@ -22,7 +22,7 @@ Database.prototype.validateUser = function(user,cb){
 	});
 }
 Database.prototype.addUser = function(user,cb){
-	user.image = "./images/dp/default.jpg";
+	user.image = "./images/dp/default.png";
 	db.collection("users").insert(user,function(err,res){
 		if(!err){
 			cb({email:user.email,fullName:user.fullName,status:"U"});
@@ -42,6 +42,57 @@ Database.prototype.checkEmail = function(email,cb){
 		else{
 			cb({alreadyExist:true});	
 		}
+	});
+}
+Database.prototype.checkEmailAndDOB = function(user,cb){
+	db.collection("users").findOne(user,function(err,res){
+		if(res == null){
+			cb({status:"failed"});
+		}
+		else{
+			cb({status:"success"});	
+		}
+	})
+}
+Database.prototype.resetPassword = function(user,cb){
+	db.collection("users").update({email:user.email},{$set:{password:user.password}},function(err,res){
+		if(err == null){
+			cb({status:"success"});
+		}
+		else{
+			cb({status:"failed"});
+		}
+	})
+}
+Database.prototype.getUserInfo = function(user,cb){
+	db.collection("users").findOne({email:user.email},{dob:1,fullName:1,mobile:1,_id:0},function(err,result){
+		cb(result);
+	})
+}
+Database.prototype.setUserInfo = function(user,cb){
+	db.collection("users").update({email:user.email},{$set:user.user},function(err,res){
+		if(err == null){
+			cb({status:"updated"});
+		}
+		else{
+			cb({status:"failed"});
+		}
+	});
+}
+Database.prototype.changePassword = function(detail,cb){
+	db.collection("users").findOne({email:detail.email,password:detail.passwords.oldpassword},function(err,res){
+		if(res == null){
+			cb({status:"failed"});
+			return
+		}
+		else{
+			cb({status:"success"});
+			db.collection("users").update({email:detail.email},{$set:{password:detail.passwords.newpassword}});
+		}
+	})
+}
+Database.prototype.saveProfileImg = function(user){
+	db.collection("users").update({email:user.email},{$set:{image:user.image}},function(err,res){
 	});
 }
 Database.prototype.getUsers = function(user,cb){
@@ -64,6 +115,7 @@ Database.prototype.getUsers = function(user,cb){
 					return user1.email == friend.email;
 				});
 				friend.image = resuser.image;
+				friend.fullName = resuser.fullName;
 				var socket = socketList[friend.email];
 				if(socket){
 					friend.online=true;
@@ -77,7 +129,7 @@ Database.prototype.getUsers = function(user,cb){
 				var socket = socketList[allUsers[i].email];
 				var online = false;
 				if(socket){
-					friend.online=true;
+					online=true;
 				}
 				friends.push({fullName:allUsers[i].fullName,email:allUsers[i].email,status:"U",image:allUsers[i].image,online:online});
 			}
@@ -151,14 +203,12 @@ Database.prototype.addFriend = function(req,cb){
 		if(result == null){
 			db.collection("friends").update({email:currentUser.email},{$push:{friends:{
 				email:friend.email,
-				fullName:friend.fullName,
 				status:"S",
 				lastActivity:time,
 				unread:0
 			}}});
 			db.collection("friends").update({email:friend.email},{$push:{friends:{
 				email:currentUser.email,
-				fullName:currentUser.fullName,
 				status:"N",
 				lastActivity:time,
 				unread:0
