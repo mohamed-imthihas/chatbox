@@ -1,0 +1,103 @@
+<nav>
+    <div class="nav-wrapper teal">
+    	<div class="brand-logo left">
+    		<a href="javascript:void(0)" routerLink="/home" ><i class="material-icons">arrow_back</i></a>
+      		<span>Profile</span>
+      	</div>
+    </div>
+</nav>
+<div class="row wrapper">
+	<div class="col l4 m4 s12 center-align">
+		<div class="image-wrapper">
+			<img [src]="user | userinfo:'image'" class="circle">
+			<a (click)="imgInput.click()" href="javascript:void(0);">Change Image</a>
+		</div>
+		<input type="file" class="hide" #imgInput accept="image/*" (change)="uploadImage($event)">
+	</div>
+	<div class="col l8 m8 s12">
+		<div class="row">
+		<form class="col s12" [formGroup]="userDetail" (ngSubmit)="submitForm()">
+		<div class="row">
+				<div class="input-field col s12">
+						<input type="text" name="fullName" id="fullName" formControlName="fullName" [ngClass]="{'invalid':(userDetail.get('fullName').hasError('required') || userDetail.get('fullName').hasError('minlength') || userDetail.get('fullName').hasError('maxlength')) && userDetail.get('fullName').touched} ">
+					<label for="fullName">Full Name</label>
+					<div class="red-text" [hidden]="!(userDetail.get('fullName').hasError('required') && userDetail.get('fullName').touched)">
+						Full name is required.
+					</div>
+					<div class="red-text" [hidden]="!((userDetail.get('fullName').hasError('minlength') || userDetail.get('fullName').hasError('maxlength')) && userDetail.get('fullName').touched)">
+						Full name should have min. 5 characters &amp; max. 18 characters.
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="input-field col s12">
+						<input type="text" name="dob" id="dob" formControlName="dob" materialize="pickadate" [ngClass]="{'invalid':userDetail.get('dob').hasError('required')  && userDetail.get('dob').touched} ">
+					<label for="dob">Date Of Birth</label>
+					<div class="red-text" [hidden]="!(userDetail.get('dob').hasError('required') && userDetail.get('dob').touched)">
+						Date of Birth is required	
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="input-field col s12">
+						<input type="text" name="mobile" id="mobile" formControlName="mobile" [ngClass]="{'invalid':(userDetail.get('mobile').hasError('required') || userDetail.get('mobile').hasError('pattern'))  && userDetail.get('mobile').touched} ">
+					<label for="mobile">Mobile Number</label>
+					<div class="red-text" [hidden]="!(userDetail.get('mobile').hasError('required') && userDetail.get('mobile').touched)">
+						Mobile Number is required.
+					</div>
+					<div class="red-text" [hidden]="!((!userDetail.get('mobile').hasError('required') && userDetail.get('mobile').hasError('pattern')) && userDetail.get('mobile').touched)">
+						 Enter 10 digit number without (+91)
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col s12 center-align">
+					<a href="javascript:void(0)" (click)="enableForm()" [class.hide]="editMode" class="btn">Edit Info</a>
+					<input type="submit" name="" [disabled]="userDetail.invalid" [class.hide]="!editMode" value="Update" class="btn">
+					<a href="javascript:void(0)" (click)="disableForm()" [class.hide]="!editMode" class="btn">Cancel</a>
+					<a class="btn btn-small" [class.hide]="editMode" (click)='openPasswordModal()'>Change Password</a>
+				</div>
+			</div>
+		</form>
+	</div>
+	</div>
+</div>
+<div id="modal1" class="modal bottom-sheet"  materialize="modal" [materializeParams]="model1Params" [materializeActions]="modalActions1">
+	<div class="modal-content">
+	 <div class="row">
+		<form class="col s12 l6 m8 offset-l3 offset-m2" [formGroup]="passForm" (ngSubmit)="changePassword()">
+			<h3>Change Password</h3>
+			<div class="row">
+				<div class="input-field col s12">
+					<input type="password" name="oldpassword" id="oldpassword" formControlName="oldpassword" >
+					<label for="oldpassword">Old Password</label>
+					<div class="red-text" [hidden]="!(passForm.get('oldpassword').hasError('required') && passForm.get('oldpassword').touched)">
+						Old Password is required.
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="input-field col s12">
+					<input type="password" name="newpassword" id="newpassword" formControlName="newpassword" [ngClass]="{'invalid':(passForm.get('newpassword').hasError('required') || passForm.get('newpassword').hasError('pattern')) && passForm.get('newpassword').touched} ">
+					<label for="newpassword">New Password</label>
+					<div class="red-text" [hidden]="!(passForm.get('newpassword').hasError('required') && passForm.get('newpassword').touched)">
+						New Password is required.
+					</div>
+					<div class="red-text" [hidden]="!(passForm.get('newpassword').hasError('pattern') && passForm.get('newpassword').touched)">
+						Password should be min. 8 characters with one special character.
+					</div>
+				</div>
+			</div>
+			<div class="red-text" [hidden]="!passwordError">
+				Old password is incorrect. Try Again
+			</div>
+			<div class="row">
+				<div class="col s12 center-align">
+					<a href="javascript:void(0)" (click)="closePasswordModal()" class="btn">Cancel</a>
+					<input type="submit" name="" [disabled]="passForm.invalid" value="Change Password" class="btn">
+				</div>
+			</div>
+		</form>
+	</div>
+	</div>
+</div>

@@ -12,7 +12,8 @@ moduleId: __moduleName,
 export class FriendListComponent implements OnInit{
 	users:any[]=[];
 	currentUser:any;
-	constructor(private userListService:FriendListService,private authService:AuthenticationService){}
+	constructor(private userListService:FriendListService,private authService:AuthenticationService){
+	}
 	ngOnInit(){
 		this.users = this.userListService.getUsers();
 		this.currentUser = this.authService.getLoggedUser();

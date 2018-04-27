@@ -38,7 +38,7 @@ export class SocketService{
 	}
 	getUserUpdate(){
 		 let observable = new Observable(observer => {
-	      this.socket.on('updateUserList', (data:any) => {
+	      this.socket.on('updateUserList', (data:any) => {	      	
 	        observer.next(data);    
 	      });
 	      return () => {

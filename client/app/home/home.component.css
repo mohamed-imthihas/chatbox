@@ -1,8 +1,13 @@
-:host user-list, :host chat{
-	padding: 0px;
+.wrapper{
+	display: flex;
+	flex-direction: column;
+	height: 100vh;	
 }
 .collection .collection-item.avatar{
 	padding-right: 40px;
+}
+.collection .collection-item.avatar img{
+	cursor: pointer;
 }
 .collection .collection-item.avatar .secondary-content {
 	top:50%;

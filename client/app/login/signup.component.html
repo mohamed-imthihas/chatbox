@@ -1,5 +1,5 @@
 <div class="row">
-	<div class="col s6 offset-s3">
+	<div class="col l6 offset-l3 s12 m8 offset-m2">
 	<h1>Sign up</h1>
 	<div class="row">
 		<form class="col s12" [formGroup]="signupForm" (ngSubmit)="signUp()">
@@ -53,7 +53,7 @@
 			</div> -->
 			<div class="row">
 				<div class="input-field col s12">
-						<input type="text" name="dob" id="dob" formControlName="dob" materialize="pickadate" [ngClass]="{'invalid':signupForm.get('dob').hasError('required')  && signupForm.get('dob').touched} ">
+						<input type="text" name="dob" id="dob" formControlName="dob" materialize="pickadate"  [materializeParams]="[{selectYears: true,selectMonths: true,min:minDate,max:maxDate,close:'Ok'}]" [ngClass]="{'invalid':signupForm.get('dob').hasError('required')  && signupForm.get('dob').touched} ">
 					<label for="dob">Date Of Birth</label>
 					<div class="red-text" [hidden]="!(signupForm.get('dob').hasError('required') && signupForm.get('dob').touched)">
 						Date of Birth is required	

@@ -1,5 +1,5 @@
 <div class="inputDiv">
-	<div contenteditable="true" class="inputBox" #msgDiv [(contenteditableModel)]="content" [contenteditableHtml]=true></div>
+	<div contenteditable="true" [class.hide]="disabled" class="inputBox" #msgDiv [(contenteditableModel)]="content" [contenteditableHtml]=true></div>
 	<i class="material-icons emojiBtn" 
 	    (click)="toggled = !toggled"
 	    [(emojiPickerIf)]="toggled"

@@ -1,15 +1,24 @@
 <div>
-	<div *ngIf="toUser != undefined">
+	<div *ngIf="toUser != undefined" class="wrapper">
 		<nav>
-		    <div class="nav-wrapper">
+		    <div class="nav-wrapper teal">
 		      <div class="brand-logo left">
 		      <a href="javascript:void(0)" class="middle" routerLink="/home"><i class="material-icons hide-on-med-and-up">arrow_back</i>
 		      </a>
 		      <img [src]="toUser | userinfo:'image'" class="middle circle">
-		      <span class="middle">{{toUser.fullName}}</span></div>
+		      <span class="middle">{{toUser | userinfo:'fullName'}}</span></div>
 		    </div>
 		</nav>
 		<div class="messages" #msgDiv>
+			<div *ngIf="toUser.status == 'F'" class="center-align">
+				<h6>You and {{toUser | userinfo:'fullName'}} are friends. Start chatting</h6>
+			</div>
+			<div *ngIf="toUser.status == 'S'" class="center-align">
+				<h6>Request has been sent</h6>
+			</div>
+			<div *ngIf="toUser.status == 'R'" class="center-align">
+				<h6>Request has been Reject</h6>
+			</div>
 			<div *ngFor = "let msg of messages;let i = index">
 				<div *ngIf="i == 0 || msg.time.substring(0,10) != messages[i-1].time.substring(0,10)" class="date center-align">{{msg.time | date:"dd MMMM yy"}}
 				</div>
@@ -18,22 +27,13 @@
 						
 					</div>
 					<div class="clearfix"></div>
-					<div class="time">{{msg.time | date:'HH:mm'}}</div>
+					<div class="time">{{msg.time | date:'hh:mm a'}}</div>
 				</div>
 				
 				
 			</div>
-			<div *ngIf="messages.length ==0 && toUser.status == 'F'" class="center-align">
-				<h6>You and {{toUser.fullName}} are friends. Start chatting</h6>
-			</div>
-			<div *ngIf="toUser.status == 'S'" class="center-align">
-				<h6>Request has been sent</h6>
-			</div>
-			<div *ngIf="toUser.status == 'R'" class="center-align">
-				<h6>Request has been Reject</h6>
-			</div>
 		</div>
-		<emoji-input (onSend)="sendMessage($event)"></emoji-input>
+		<emoji-input (onSend)="sendMessage($event)" [disabled]="toUser.status != 'F'"></emoji-input>
 	</div>
 		<div class="" *ngIf="toUser == undefined">
 			<br>

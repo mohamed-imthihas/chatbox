@@ -3,7 +3,7 @@
 		<a *ngFor="let user of users | sort" class="collection-item avatar waves-effect wave-light"  (click)="changeUser(user)" [class.hide]="user.email == currentUser.email">
 			<img [src]="user | userinfo:'image'" class="circle" [class.online]="user | userinfo:'online'">
 			<span class="new badge" [hidden]="user.unread==0">{{user.unread}}</span>
-			<span>{{user.fullName}}</span>
+			<span>{{user | userinfo:'fullName'}}</span>
 		</a>
 	</div>
 	<div *ngIf="users==undefined || (users | sort).length == 0">

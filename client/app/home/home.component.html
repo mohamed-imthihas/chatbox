@@ -1,21 +1,21 @@
 <div>
 	
 	<div class="row">
-		<div class="col l4 m4 s12" [ngClass]="{'hide-on-small-only':isChat}">
+		<div class="col l4 m4 s12 wrapper" [ngClass]="{'hide-on-small-only':isChat}">
 			<div class="collection">
 				<div class="collection-item avatar valign-wrapper">
-					<img [src]="currentUser | userinfo:'image'" class="circle">
-					<span class="title truncate">{{currentUser.fullName}}</span>
+					<img routerLink="/profile" materialize="tooltip" data-tooltip="View profile" [src]="currentUser | userinfo:'image'" class="circle">
+					<span class="title truncate">{{currentUser | userinfo:'fullName'}}</span>
 					<div class="secondary-content">
 						<!-- <a href="javascript:void(0)"><i class="material-icons">people</i></a> -->
-						<a href="javascript:void(0)" (click)="logout()"><i class="material-icons">exit_to_app</i></a>
+						<a href="javascript:void(0)" materialize="tooltip" data-tooltip="Logout" (click)="logout()"><i class="material-icons">exit_to_app</i></a>
 					</div>
 				</div>
 			</div>
 			<nav [hidden]="isAll">
 			    <div class="nav-wrapper teal">
 			      <a class="brand-logo left">Friends</a>
-			      <a href="javascript:void(0)" class="right" routerLink="/home/all"><i class="material-icons">people</i></a>
+			      <a href="javascript:void(0)" class="right" [class.orange-text]="'user'|requestCount" routerLink="/home/all"><i class="material-icons">people</i></a>
 			    </div>
 			</nav>
 			<nav [hidden]="!isAll">

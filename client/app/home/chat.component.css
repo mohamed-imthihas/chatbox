@@ -1,6 +1,12 @@
 :host{
 	border: 1px solid #ccc;
-	height: 615px;
+	height: 100vh;
+	padding: 0px !important;
+}
+.wrapper{
+	display: flex;
+    flex-direction: column;
+    height: 100vh;
 }
 nav .nav-wrapper{
 	padding:0px 10px;
@@ -16,10 +22,11 @@ nav img{
 	text-align: center;
 }
 .messages{
-	height: 500px;
+	flex: 1;
 	border-bottom:  1px solid #ccc;
 	overflow-y: scroll;
 	padding-top: 10px;
+	background-color: rgb(245, 242, 240);
 }
 .messages::-webkit-scrollbar-track
 {

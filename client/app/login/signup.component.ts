@@ -2,15 +2,20 @@ import { Component,OnInit } from '@angular/core';
 import { FormGroup, Validators,FormBuilder,FormControl } from '@angular/forms';
 import {AuthenticationService} from "./authentication.service";
 import {Router} from "@angular/router";
+declare var Materialize:any;
 @Component({
 moduleId: __moduleName,
   selector: 'sign-up',
-  templateUrl: './signup.component.html'
+  templateUrl: './signup.component.html',
+  styleUrls: ['./login.component.css']
 })
 export class SignupComponent implements OnInit{
 	signupForm:FormGroup;
+	minDate:Date;
+	maxDate:Date;
 	constructor(private fb: FormBuilder,private router:Router,private authService:AuthenticationService){
- 		
+ 		this.minDate = new Date(1970,1,1);
+ 		this.maxDate = new Date();
  	}
 	ngOnInit(){
 		this.signupForm = this.fb.group({
@@ -24,6 +29,7 @@ export class SignupComponent implements OnInit{
 	signUp(){
 		this.authService.signUp(this.signupForm.value).then((isSuccess)=>{
 			if(isSuccess){
+				Materialize.toast("Sign up completed",2000);
 				this.router.navigate(["/"]);		
 			}
 		});	

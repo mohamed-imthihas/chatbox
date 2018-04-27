@@ -14,13 +14,11 @@ export class FriendListService{
 	currentUser:any;
 	 private userChange = new Subject<any>();
 	 userChange$ = this.userChange.asObservable();
-	constructor(private http:Http,private authService:AuthenticationService,private socketService:SocketService){
-		this.currentUser = this.authService.getLoggedUser();
-		
+	constructor(private http:Http,private authService:AuthenticationService,private socketService:SocketService){		
 	}
 	getUsers(){
+		this.currentUser = this.authService.getLoggedUser();
 		this.socketService.getFriendUpdate().subscribe(data => {
-			console.log("socker",data);
 			this.updateUserList(data);
 		});
 		this.http.post("/getFriends",this.currentUser)

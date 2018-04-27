@@ -17,6 +17,7 @@ moduleId: __moduleName,
 })
 export class EmojiInputComponent implements OnInit {
 	@ViewChild('msgDiv') private msgDiv: ElementRef;
+	@Input() disabled:boolean;
 	content:string="";
 	constructor(private emojiPickerOptions: EmojiPickerOptions,private emojiService:EmojiService){
 		this.emojiPickerOptions.setEmojiSheet({

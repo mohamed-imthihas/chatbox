@@ -6,15 +6,17 @@ import { Observable } from "rxjs/Observable";
 import * as io from 'socket.io-client';
 import {AuthenticationService} from "../login/authentication.service";
 import {SocketService} from "./socket.service";
-import {User} from "../login/user.model";
+import {UserListService} from "./userlist.service";
 
+import {User} from "../login/user.model";
+declare var Materialize:any;
 @Injectable()
 export class MessageService{
 	socket:any;
 	currentUser:User;
 	toUser:User;
 	messages:any[] = [];
-	constructor(private authService:AuthenticationService,private http:Http,private socketService:SocketService){
+	constructor(private authService:AuthenticationService,private http:Http,private socketService:SocketService,private userListService:UserListService ){
 		this.currentUser = this.authService.getLoggedUser();
 	}
 	/*private _getMessages() {
@@ -30,7 +32,9 @@ export class MessageService{
 	    return observable;
 	}*/
 	getMessage(){
+		this.currentUser = this.authService.getLoggedUser();
 		this.socketService.getMessages().subscribe(data=>{
+			Materialize.toast("New Message from "+this.userListService.getProp(data.from,"fullName"),2000);
 			if(this.toUser == null || this.toUser.email != data.from){
 				return;
 			}
@@ -60,6 +64,7 @@ export class MessageService{
 	private _loadMsgs(){
 		this.messages.splice(0,this.messages.length);
 		this.http.post("/getMessages",{user1:this.currentUser.email,user2:this.toUser.email}).toPromise().then((data)=>{
+			this.messages.splice(0,this.messages.length);
 			this.messages.push.apply(this.messages,data.json());
 		});
 	}

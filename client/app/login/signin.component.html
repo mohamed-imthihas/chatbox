@@ -1,5 +1,8 @@
 <div class="row">
-	<div class="col s6 offset-s3">
+	<div class="col l6 offset-l3 s12 m8 offset-m2">
+	<div class="title">
+		<img src="./icon.png"><span>F-Chat</span>
+	</div>
 	<h1>Sign in</h1>
 	<div class="row">
 		<form class="col s12" [formGroup]="signinForm" (ngSubmit)="login()">
@@ -31,7 +34,8 @@
 			</div>
 			<div class="row">
 				<div class="col s6">
-					<a routerLink="/signup">New User? Click here to sign up</a>
+					<div><a routerLink="/signup">New User? Click here to sign up</a></div>
+					<div><a routerLink="/forgetpassword">Forget password?</a></div>
 				</div>
 				<div class="col s6 right-align">
 					<input type="submit" name="" [disabled]="signinForm.invalid" value="Login" class="btn">

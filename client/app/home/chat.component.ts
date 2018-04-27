@@ -1,23 +1,25 @@
-import { Component,OnInit,AfterViewChecked, ElementRef, ViewChild } from '@angular/core';
+import { Component,OnInit,AfterViewChecked, ElementRef, ViewChild,OnDestroy } from '@angular/core';
 import { FormGroup, Validators,FormBuilder,FormControl } from '@angular/forms';
 import {FriendListService} from "./friendlist.service";
 import {MessageService} from "./message.service";
 import {Router,NavigationEnd} from "@angular/router";
 import { EmojiPickerOptions } from 'angular2-emoji-picker';
 import { EmojiPickerAppleSheetLocator } from 'angular2-emoji-picker/lib-dist/sheets/index'
+import { ISubscription } from "rxjs/Subscription";
 @Component({
 moduleId: __moduleName,
   selector: 'chat',
   templateUrl: './chat.component.html',
   styleUrls:['./chat.component.css']
 })
-export class ChatComponent implements OnInit,AfterViewChecked {
+export class ChatComponent implements OnInit,AfterViewChecked,OnDestroy {
 	@ViewChild('msgDiv') private msgDiv: ElementRef;
 	users:any[];
 	toUser:any;
 	messages:any[];
 	message:string;
 	tempDate:Date;
+	private subscription: ISubscription;
 	constructor(private userListService:FriendListService,private msgService:MessageService,private emojiPickerOptions: EmojiPickerOptions,private router:Router){
 			this.emojiPickerOptions.setEmojiSheet({
 	      url: 'sheet_apple_32.png',
@@ -34,8 +36,7 @@ export class ChatComponent implements OnInit,AfterViewChecked {
 	    
 	}
 	ngOnInit(){
-
-		this.userListService.userChange$.subscribe((data)=>{
+		this.subscription = this.userListService.userChange$.subscribe((data)=>{
 			this.toUser = data;
 			this.msgService.setToUser(data);
 			this.router.navigate(["/home/chat"]);
@@ -60,5 +61,8 @@ export class ChatComponent implements OnInit,AfterViewChecked {
 			return true;
 		}
 		return false;
+	}
+	ngOnDestroy(){
+		 this.subscription.unsubscribe();
 	}
 }

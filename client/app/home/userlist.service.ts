@@ -8,6 +8,7 @@ import {AuthenticationService} from "../login/authentication.service";
 import {SocketService} from "./socket.service";
 import {FriendListService} from "./friendlist.service";
 import { Subject }    from 'rxjs/Subject';
+declare var Materialize:any;
 
 @Injectable()
 export class UserListService{
@@ -17,17 +18,10 @@ export class UserListService{
 	 userChange$ = this.userChange.asObservable();
 	constructor(private http:Http,private authService:AuthenticationService,
 		private socketService:SocketService,private friendListService:FriendListService){
-		this.currentUser = this.authService.getLoggedUser();
-		this.getUsers();
-		this.socketService.getUserStatus().subscribe(data =>{
-			for(let i=0;i<this.userList.length;i++){
-				if(this.userList[i].email == data.email){
-					this.userList[i].online = data.online;
-				}
-			}
-		});
+		this.loadUsers();
 	}
-	getUsers(){
+	loadUsers(){
+		this.currentUser = this.authService.getLoggedUser();
 		this.socketService.getUserUpdate().subscribe(data => {
 			this.updateUserList(data);
 		});
@@ -38,6 +32,20 @@ export class UserListService{
              	this.userList.push.apply(this.userList,response.json());
          	
              });
+		this.socketService.getUserStatus().subscribe(data =>{
+			for(let i=0;i<this.userList.length;i++){
+				if(this.userList[i].email == data.email){
+					this.userList[i].online = data.online;
+					if(this.userList[i].status != 'U'){
+						let msg data.online ? this.userList[i].fullName+" is online": this.userList[i].fullName+" is offline";
+						this.spawnMsg(msg);
+					}
+				}
+			}
+		});
+	}
+	getUsers(){
+		
         return this.userList;
 	}
 	changeUser(user:any){
@@ -54,11 +62,40 @@ export class UserListService{
 			this.friendListService.updateUserList(response.json());
 		});
 	}
-
+	private _oldMsg:string = null;
+	spawnMsg(msg){
+		if(msg != this._oldMsg){
+						this._oldMsg = msg;
+						Materialize.toast(msg,2000);
+					}
+					setTimeout(()=>{this._oldMsg = null;});
+	}
 	updateUserList(newInfo:any){
+		let msg:string;
 		for(let i=0;i<this.userList.length;i++){
 			if(this.userList[i].email == newInfo.email){
-				this.userList[i].status = newInfo.status;
+				if(newInfo.fullName != undefined){
+					this.userList[i].fullName = newInfo.fullName;
+				}
+				if(newInfo.status != undefined){
+					let oldStatus = this.userList[i].status;
+					if(newInfo.status == "F" && newInfo.email != this.currentUser.email && oldStatus!="N"){
+						msg = this.userList[i].fullName+" has accepted your request";
+					}
+					else if(newInfo.status == "N" && newInfo.email != this.currentUser.email){
+						msg = "New request from "+this.userList[i].fullName;
+					}
+					else if(newInfo.status == "R" && newInfo.email != this.currentUser.email){
+						msg = this.userList[i].fullName + " has rejected your request";
+						
+					}
+					this.spawnMsg(msg);
+					this.userList[i].status = newInfo.status;
+				}
+				if(newInfo.image !=undefined){
+					this.userList[i].image = newInfo.image;	
+				}
+
 				return;
 			}
 		}
@@ -81,14 +118,24 @@ export class UserListService{
 		});
 	}
 	getProp(user,type){
-		for(let i=0;i<this.userList.length;i++){
-			if(user.email == this.userList[i].email){
-				return this.userList[i][type];
+		var temp = {
+			image:"./images/dp/default.png"
+		}
+		if(typeof user == 'string'){
+			let tp = user;
+			user = {
+				email:tp
 			}
 		}
-		var temp = {
-			image:"./images/dp/default.jpg"
+		if(user.email == undefined){
+			user.email = this.currentUser.email;
 		}
+		for(let i=0;i<this.userList.length;i++){
+			if(user.email == this.userList[i].email){
+				return this.userList[i][type]? this.userList[i][type] : temp[type];
+			}
+		}
+		
 		return temp[type];
 	}
 }
